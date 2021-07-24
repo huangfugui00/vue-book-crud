@@ -132,13 +132,13 @@ export default {
             addBookForm: {
                 title: '',
                 author: '',
-                read: [],
+                read: false,
             },
             editForm: {
                 id: '',
                 title: '',
                 author: '',
-                read: [],
+                read: false,
             },
         };
     },
@@ -170,11 +170,11 @@ export default {
          initForm() {
             this.addBookForm.title = '';
             this.addBookForm.author = '';
-            this.addBookForm.read = [];
+            this.addBookForm.read = false;
             this.editForm.id = '';
             this.editForm.title = '';
             this.editForm.author = '';
-            this.editForm.read = [];
+            this.editForm.read = false;
         },
         onSubmit(evt) {
             evt.preventDefault();
@@ -201,7 +201,7 @@ export default {
             evt.preventDefault();
             this.$refs.editBookModal.hide();
             let read = false;
-            if (this.editForm.read[0]) read = true;
+            if (this.editForm.read) read = true;
             const payload = {
                 title: this.editForm.title,
                 author: this.editForm.author,
