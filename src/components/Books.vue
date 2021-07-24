@@ -34,9 +34,10 @@
                       Update
                   </button>
                   <button
-                          type="button"
-                          class="btn btn-danger btn-sm"
-                    >
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    v-b-modal.book-delete-modal
+                    @click="editBook(book)">
                       Delete
                   </button>
                 </div>
@@ -113,6 +114,17 @@
         </b-form-group>
         <b-button-group>
           <b-button type="submit" variant="primary">Update</b-button>
+          <b-button type="reset" variant="danger">Reset</b-button>
+        </b-button-group>
+      </b-form>
+    </b-modal>
+    <b-modal ref="deleteBookModal"
+            id="book-delete-modal"
+            title="delete"
+            hide-footer>
+      <b-form @submit="onSubmitDelete" @reset="onCancel" class="w-100">
+        <b-button-group>
+          <b-button type="submit" variant="primary">Delete</b-button>
           <b-button type="reset" variant="danger">Cancel</b-button>
         </b-button-group>
       </b-form>
@@ -189,6 +201,10 @@ export default {
             this.addBook(payload);
             this.initForm();
         },
+        onCancel(evt){
+            evt.preventDefault();
+            this.$refs.deleteBookModal.hide();
+        },
         onReset(evt) {
             evt.preventDefault();
             this.$refs.addBookModal.hide();
@@ -196,6 +212,22 @@ export default {
         },
         editBook(book){
           this.editForm = book;
+        },
+        onSubmitDelete(evt){
+          evt.preventDefault()  ;
+          this.$refs.deleteBookModal.hide();
+          let book_id = this.editForm.id;
+          const path= `http://localhost:5000/book/${book_id}`;
+          axios.delete(path)
+            .then(() => {
+                    this.getBooks();
+                    console.log('success');
+                })
+                .catch((error) => {
+                // eslint-disable-next-line
+                    this.getBooks();
+                    console.error(error);
+                });
         },
         onSubmitUpdate(evt){
             evt.preventDefault();
