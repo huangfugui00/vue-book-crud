@@ -122,6 +122,8 @@
             id="book-delete-modal"
             title="delete"
             hide-footer>
+      <label>Do you want to delete this book?</label>
+      <br><br>
       <b-form @submit="onSubmitDelete" @reset="onCancel" class="w-100">
         <b-button-group>
           <b-button type="submit" variant="primary">Delete</b-button>
@@ -135,12 +137,15 @@
 
 <script>
 import axios from 'axios';
+import Alert from './Alert.vue';
 
 export default {
     name: 'Ping',
     data() {
         return {
             books: [],
+            message: '',
+            showMessage: false,
             addBookForm: {
                 title: '',
                 author: '',
@@ -153,6 +158,9 @@ export default {
                 read: false,
             },
         };
+    },
+    components:{
+      alert: Alert,
     },
     methods: {
         getBooks() {
@@ -171,7 +179,8 @@ export default {
             axios.post(path,payload)
             .then(() => {
                     this.getBooks();
-                    console.log('success');
+                    this.message = 'Book add!'
+                    this.showMessage = true
                 })
                 .catch((error) => {
                 // eslint-disable-next-line
@@ -221,7 +230,8 @@ export default {
           axios.delete(path)
             .then(() => {
                     this.getBooks();
-                    console.log('success');
+                    this.message = `book ${this.editForm.title} delete` ;
+                    this.showMessage = true
                 })
                 .catch((error) => {
                 // eslint-disable-next-line
@@ -246,7 +256,8 @@ export default {
             axios.put(path,payload)
             .then(() => {
                     this.getBooks();
-                    console.log('success');
+                    this.message = `book ${this.editForm.title} update success` ;
+                    this.showMessage = true
                 })
                 .catch((error) => {
                 // eslint-disable-next-line
